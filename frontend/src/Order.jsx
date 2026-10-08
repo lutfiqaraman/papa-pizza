@@ -17,6 +17,7 @@ export default function Order() {
 
     if (!loading) {
         selectedPizza = pizzaTypes.find((pizza) => pizzaType === pizza.id);
+        price = intl.format(selectedPizza.sizes[pizzaSize]);
     }
 
     async function fetchPizzaTypes() {
@@ -93,14 +94,20 @@ export default function Order() {
                     <button type="submit">Add to Cart</button>
                 </div>
                 <div className="order-pizza">
-                    {selectedPizza && (
-                        <Pizza
-                            name={selectedPizza.name}
-                            description={selectedPizza.description}
-                            image={selectedPizza.image}
-                        />
-                    )}
-                    <p>$13.37</p>
+                    {
+                        loading ? (
+                            <h3>Loading...</h3>
+                        ) : (
+                            <div className="order-pizza">
+                                <Pizza
+                                    name={selectedPizza.name}
+                                    description={selectedPizza.description}
+                                    image={selectedPizza.image}
+                                />
+                                <p>{price}</p>
+                            </div>
+                        )
+                    }
                 </div>
             </form>
         </div>
