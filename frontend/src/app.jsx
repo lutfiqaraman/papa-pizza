@@ -6,7 +6,6 @@ import PizzaOfTheDay from "./PizzaOfTheDay.jsx"
 const App = () => {
     return(
         <div>
-            <h1>Papa Pizza - Order Now</h1>
             <Order/>
             <PizzaOfTheDay/>
         </div>
