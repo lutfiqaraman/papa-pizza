@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import Pizza from "./Pizza";
+import Cart from "./Cart";
 
 const intl = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -12,30 +13,80 @@ export default function Order() {
     const [pizzaType, setPizzaType] = useState("pepperoni");
     const [pizzaSize, setPizzaSize] = useState("M");
     const [loading, setLoading] = useState(true);
+    const [cart, setCart] = useState([]);
 
     let price, selectedPizza;
 
     if (!loading) {
         selectedPizza = pizzaTypes.find((pizza) => pizzaType === pizza.id);
-        price = intl.format(selectedPizza.sizes[pizzaSize]);
+
+        if (selectedPizza) {
+            price = intl.format(selectedPizza.sizes[pizzaSize]);
+        }
+    }
+
+    async function checkout() {
+        setLoading(true);
+
+        try {
+            const response = await fetch("/api/order", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ cart })
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to submit order");
+            }
+
+            setCart([]);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     }
 
     async function fetchPizzaTypes() {
-        const apiPath = "/api/pizzas";
-        const pizzaRes = await fetch(apiPath);
-        const pizzaJson = await pizzaRes.json();
-        setPizzaTypes(pizzaJson);
-        setLoading(false);
+
+        try {
+            const pizzaRes = await fetch("/api/pizzas");
+
+            if (!pizzaRes.ok) {
+                throw new Error("Failed to fetch pizzas");
+            }
+
+            const pizzaJson = await pizzaRes.json();
+            setPizzaTypes(pizzaJson);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
         fetchPizzaTypes();
     }, []);
 
+
     return (
         <div className="order">
             <h2>Create Order</h2>
-            <form>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+
+                setCart((previousCart) => [
+                    ...previousCart,
+                    {
+                        pizza: selectedPizza,
+                        size: pizzaSize,
+                        price
+                    }
+                ]);
+            }}>
                 <div>
                     <div>
                         <label htmlFor="pizza-type">Pizza Type</label>
@@ -91,7 +142,9 @@ export default function Order() {
 
                         </div>
                     </div>
-                    <button type="submit">Add to Cart</button>
+                    <button type="submit" disabled={loading || !selectedPizza}>
+                        Add to Cart
+                    </button>
                 </div>
                 <div className="order-pizza">
                     {
@@ -110,6 +163,10 @@ export default function Order() {
                     }
                 </div>
             </form>
+            {
+                loading ? <h2>LOADING ...</h2> :
+                    <Cart checkout={checkout} cart={cart} />
+            }
         </div>
     );
 }
