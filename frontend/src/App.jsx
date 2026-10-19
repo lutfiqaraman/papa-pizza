@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import Order from "./Order.jsx";
 import PizzaOfTheDay from "./PizzaOfTheDay.jsx"
 import Header from "./Header.jsx";
-import { CartContext } from "./contexts.jsx";
+import { CartContext } from "./Contexts.jsx";
 
 
 const App = () => {

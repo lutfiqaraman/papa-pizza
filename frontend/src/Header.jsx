@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { CartContext } from "./contexts.jsx";
+import { CartContext } from "./Contexts.jsx";
 
 export default function Header() {
 
