@@ -44,12 +44,12 @@ nav {
 .logo {
   width: 100%;
   height: 110px;
-  background-position: left;
-  background-repeat: no-repeat;
-  content: url("/papa_pizza.svg");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
   border-bottom: 1px solid #ccc;
-  padding-bottom: 20px;
-  padding-top: 20px;
+  margin: 0;
 }
 
 nav .logo {
