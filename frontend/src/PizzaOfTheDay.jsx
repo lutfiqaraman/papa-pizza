@@ -9,10 +9,11 @@ const PizzaOfTheDay = () => {
     const pizzaOfTheDay = usePizzaOfTheDay();
 
     if (!pizzaOfTheDay) {
-        return
+        return (
             <div>
                 Loading ...
             </div>
+            );
     }
 
     return (

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import PizzaOfTheDay  from '../PizzaOfTheDay.jsx';
 import Header from '../Header.jsx';
 import { CartContext } from '../Contexts.jsx';
-import Order from "../routes/order.lazy.jsx";
 
 export const Route = createRootRoute({
     component: () => {
@@ -21,8 +21,8 @@ export const Route = createRootRoute({
                     </div>
                 </CartContext.Provider>
                 <TanStackRouterDevtools/>
+                <ReactQueryDevtools/>
             </>
         );
-
     }
 })
